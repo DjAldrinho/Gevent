@@ -1,0 +1,53 @@
+version: "3.7"
+services:
+
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: gevent-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - gevent-network
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.6
+    ports:
+      - '${DB_PORT:-3306}:3306'
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    container_name: gevent-db
+    environment:
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+      - 'gevent-mysql:/var/lib/mysql'
+    networks:
+      - gevent-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: gevent-nginx
+    restart: unless-stopped
+    ports:
+      - '${APP_PORT:-81}:80'
+    volumes:
+      - ./:/var/www
+      - ./nginx:/etc/nginx/conf.d/
+    networks:
+      - gevent-network
+
+networks:
+  gevent-network:
+    driver: bridge
+volumes:
+  gevent-mysql:
+    driver: local

@@ -1,0 +1,15 @@
+
+?
+app/Usuario.php,1\9\19f31139185e0a0aba13356caa2603671d7f1781
+7
+artisan,7\b\7b71702630186bd4af512196be21d5bd978c3333
+=
+composer.json,3\9\3957b91a0d8450cea0115cfd5af69eac90d75897
+A
+bootstrap/app.php,f\4\f4e0869689d9f3473be5a60831013b90d22203ca
+F
+bootstrap/autoload.php,b\1\b175988a9a1a0aebdd38feb0f1459b02223cc062
+9
+	readme.md,2\7\275d783e298228506068436512433d343feb52aa
+<
+.env.example,d\4\d4dae00d11854b35292c2b8a30515a9a0aa2d871
