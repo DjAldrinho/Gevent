@@ -4,13 +4,12 @@ namespace App;
 
 use App\Traits\DatesTranslator;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\Access\Authorizable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Jenssegers\Date\Date;
 
 class Usuario extends Model implements AuthenticatableContract,
@@ -31,7 +30,10 @@ class Usuario extends Model implements AuthenticatableContract,
         'email',
         'password',
         'is_superadministrador',
-        'fecha_nacimiento'
+        'is_administrador',
+        'fecha_nacimiento',
+        'avatar',
+        'cargo'
     ];
 
     /**
