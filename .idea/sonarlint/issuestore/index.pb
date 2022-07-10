@@ -1,10 +1,6 @@
 
-?
-app/Usuario.php,1\9\19f31139185e0a0aba13356caa2603671d7f1781
 7
 artisan,7\b\7b71702630186bd4af512196be21d5bd978c3333
-=
-composer.json,3\9\3957b91a0d8450cea0115cfd5af69eac90d75897
 A
 bootstrap/app.php,f\4\f4e0869689d9f3473be5a60831013b90d22203ca
 F
