@@ -1,18 +1,18 @@
-FROM php:5.5-fpm
+FROM php:5.6-fpm
 
 ARG user=laravel
 ARG uid=1000
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
     curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
     libzip-dev \
     unzip \
-    supervisor
+    supervisor \
+    openssl
 
 RUN mkdir -p /etc/supervisor.d/
 
