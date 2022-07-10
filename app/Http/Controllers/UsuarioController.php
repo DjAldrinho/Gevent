@@ -2,24 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Usuario;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class UsuarioController extends Controller
 {
-
 
     /**
      * UsuarioController constructor.
      */
     public function __construct()
     {
-        //$this->middleware('auth.admin', ['only' => ['index', 'destroy', 'show', 'edit', 'update']]);
-       // $this->middleware('auth', ['only' => ['getChangePassword', 'postChangePassword']]);
         $this->middleware('guest', ['only' => ['getLogin']]);
     }
 
@@ -70,7 +66,7 @@ class UsuarioController extends Controller
                 $usuario->password = $expEmail[0];
             }
 
-            if($request->permisos == 'S'){
+            if ($request->permisos == 'S') {
                 $usuario->is_superadministrador = true;
             }
 
@@ -118,23 +114,30 @@ class UsuarioController extends Controller
             'nombres' => 'required|max:255',
             'apellidos' => 'required|max:255',
             'fecha_nacimiento' => 'required',
+            'cargo' => 'max:255',
+            'avatar' => 'required|image|mimes:jpeg,png,jpg',
+            'is_administrador' => 'string',
+            'is_superadministrador' => 'string',
             'email' => 'required|email|max:255|unique:usuarios',
         ]);
 
         if ($validator->fails()) {
             return view('pages.registro')->withInput($request->all())->withErrors($validator);
-        } else {
-            Usuario::create([
-                'nombres' => $request['nombres'],
-                'apellidos' => $request['apellidos'],
-                'fecha_nacimiento' => $request['fecha_nacimiento'],
-                'email' => $request['email'],
-                'password' => $request['identificacion'],
-                'is_superadministrador' => !isset($request['is_superadminsitrador']) ? false : $request['is_superadminsitrador'],
-            ]);
-
-            return redirect('usuarios');
         }
+
+        Usuario::create([
+            'nombres' => $request['nombres'],
+            'apellidos' => $request['apellidos'],
+            'fecha_nacimiento' => $request['fecha_nacimiento'],
+            'email' => $request['email'],
+            'cargo' => $request['cargo'],
+            'avatar' => $this->uploadFile($request->file('avatar')) ?: '',
+            'password' => $request['identificacion'],
+            'is_administrador' => !isset($request['is_administrador']) ? false : $request['is_administrador'],
+            'is_superadministrador' => !isset($request['is_superadminsitrador']) ? false : $request['is_superadminsitrador'],
+        ]);
+
+        return redirect('usuarios');
     }
 
     public function logout(Request $request)
@@ -148,35 +151,17 @@ class UsuarioController extends Controller
         return redirect('/');
     }
 
-
-
-    /*public function getChangePassword()
-{
-    return view('pages.cambiar-password');
-}*/
-
-    /* public function postChangePassword(Request $request)
-     {
-         if (\Hash::check($request->a_password, $request->Usuario()->password)) {
-             if ($request->n_password == $request->a_password) {
-                 \Session::flash('error', 'No ingrese la misma contraseña que la antigua');
-                 return back();
-             } else {
-                 if ($request->n_password == $request->rn_password) {
-                     $request->Usuario()->password = $request->n_password;
-                     $request->Usuario()->update();
-                     \Auth::logout();
-                     return redirect('login');
-                 } else {
-                     \Session::flash('error', 'Las contraseñas no coinciden');
-                     return back();
-                 }
-             }
-         } else {
-             \Session::flash('error', 'La contraseña que has ingresado no es la antigua');
-             return back();
-         }
-     }*/
-
-
+    private function uploadFile($file)
+    {
+        try {
+            if (isset($file)) {
+                $input['image-name'] = time() . '.' . $file->getClientOriginalExtension();
+                $destinationPath = public_path('/fotos');
+                $file->move($destinationPath, $input['image-name']);
+                return $input['image-name'];
+            }
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
 }
