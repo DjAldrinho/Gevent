@@ -50,30 +50,32 @@ class UsuarioController extends Controller
             'nombres' => 'required|max:255',
             'apellidos' => 'required|max:255',
             'fecha_nacimiento' => 'required',
-            'permisos' => 'required',
+            'cargo' => 'max:255',
+            'avatar' => 'image|mimes:jpeg,png,jpg',
+            'is_administrador' => 'string',
+            'is_superadministrador' => 'string',
+            'password' => 'required|confirmed',
             'email' => 'required|email|max:255|unique:usuarios,email,' . $usuario->id
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $usuario->nombres = $request->nombres;
-            $usuario->apellidos = $request->apellidos;
-            $usuario->email = $request->email;
-            $usuario->fecha_nacimiento = $request->fecha_nacimiento;
-            if (!$usuario->is_superadministrador) {
-                $expEmail = explode('@', $request->email);
-                $usuario->password = $expEmail[0];
-            }
-
-            if ($request->permisos == 'S') {
-                $usuario->is_superadministrador = true;
-            }
-
-            $usuario->update();
-
-            return redirect('usuarios')->with('mensaje', 'Cambios realizados correctamente!');
         }
+
+
+
+        $usuario->nombres = $request->nombres ?: $usuario->nombres;
+        $usuario->apellidos = $request->apellidos ?: $usuario->apellidos;
+        $usuario->email = $request->email ?: $usuario->email;
+        $usuario->fecha_nacimiento = $request->fecha_nacimiento ?: $usuario->fecha_nacimiento;
+        $usuario->cargo = $request->cargo ?: $usuario->cargo;
+        $usuario->avatar = $this->uploadFile($request->file('avatar')) ?: $usuario->avatar;
+        $usuario->password = bcrypt($request->password) ?: $usuario->password;
+        $usuario->is_administrador = boolval($request->is_administrador) ?: $usuario->is_administrador;
+        $usuario->is_superadministrador = boolval($request->is_superadministrador) ?: $usuario->is_superadministrador;
+        $usuario->update();
+
+        return redirect('usuarios')->with('mensaje', 'Cambios realizados correctamente!');
 
     }
 
@@ -83,9 +85,9 @@ class UsuarioController extends Controller
         $usuario = Usuario::find($id);
         if ($usuario->delete()) {
             return redirect()->back()->with('mensaje', 'El usuario ha sido eliminado!');
-        } else {
-            return redirect()->back()->with('mensaje', 'No se ha podido elimiar el usuario!');
         }
+
+        return redirect()->back()->with('mensaje', 'No se ha podido elimiar el usuario!');
     }
 
 
@@ -96,9 +98,9 @@ class UsuarioController extends Controller
 
         if (Auth::attempt($credenciales, $request->remember)) {
             return redirect()->to('/');
-        } else {
-            return redirect()->back()->with('mensaje', 'Usuario o Contraseña Incorrecta');
         }
+
+        return redirect()->back()->with('mensaje', 'Usuario o Contraseña Incorrecta');
     }
 
 
@@ -114,15 +116,16 @@ class UsuarioController extends Controller
             'nombres' => 'required|max:255',
             'apellidos' => 'required|max:255',
             'fecha_nacimiento' => 'required',
+            'email' => 'required|email|max:255|unique:usuarios',
             'cargo' => 'max:255',
             'avatar' => 'required|image|mimes:jpeg,png,jpg',
             'is_administrador' => 'string',
             'is_superadministrador' => 'string',
-            'email' => 'required|email|max:255|unique:usuarios',
+            'password' => 'required|confirmed'
         ]);
 
         if ($validator->fails()) {
-            return view('pages.registro')->withInput($request->all())->withErrors($validator);
+            return back()->withInput($request->all())->withErrors($validator);
         }
 
         Usuario::create([
@@ -132,7 +135,7 @@ class UsuarioController extends Controller
             'email' => $request['email'],
             'cargo' => $request['cargo'],
             'avatar' => $this->uploadFile($request->file('avatar')) ?: '',
-            'password' => $request['identificacion'],
+            'password' => bcrypt($request['password']),
             'is_administrador' => !isset($request['is_administrador']) ? false : $request['is_administrador'],
             'is_superadministrador' => !isset($request['is_superadminsitrador']) ? false : $request['is_superadminsitrador'],
         ]);

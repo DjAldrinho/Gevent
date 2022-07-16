@@ -15,6 +15,7 @@
             padding: 8px;
         }
     </style>
+    <title>Template</title>
 </head>
 <!-- Imagen de Fondo 286*183 -->
 <body style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;-webkit-font-smoothing: antialiased;width: 100%;background: url({{($plantilla->imagen_uno != null)?$message->embed(public_path() . '/plantillas/'.$plantilla->tipo_plantilla.'/fondos/'.$plantilla->imagen_uno):''}}) left top repeat">
@@ -30,7 +31,6 @@
 <table align="center" border="0">
     <tr>
         <td width="600">
-            <h3>{{\Carbon\Carbon::now()->toFormattedDateString()}}</h3>
             @if(str_contains($plantilla->mensaje, "####"))
                 @if(isset($usuario))
                     <p>{!! str_replace("####", $usuario->getNombreCompleto(), $plantilla->mensaje) !!}</p>

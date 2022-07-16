@@ -135,7 +135,7 @@
                         </div>
                         <div class="form-group">
                             <label for="txtMensaje">Mensaje</label>
-                            <textarea class="editor" id="txtMensaje" name="mensaje" required></textarea>
+                            <textarea class="editor" id="txtMensaje" name="mensaje"></textarea>
                             <p class="help-block">Ingrese #### para remplazar por el nombre</p>
                         </div>
                         <div class="form-group">

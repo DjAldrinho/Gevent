@@ -71,7 +71,7 @@ class BirthdayCommand extends Command
                 array_push($usuariosDia, $usuario);
             }
 
-            if ($primerDia) {
+            if (true) {
                 if ($usuario->fecha_nacimiento->month == $fechaActual->month) {
                     array_push($usuariosMensual, $usuario);
                 }
@@ -79,7 +79,7 @@ class BirthdayCommand extends Command
         }
 
 
-        if ($primerDia  && count($usuariosMensual) > 0) {
+        if (count($usuariosMensual) > 0) {
             $mes = new Date($fechaActual);
             if (enviarCorreoMensual($usuariosMensual, $mes->format("F"))) {
                 $this->info('Correos Mensuales enviados!');
@@ -105,12 +105,11 @@ function enviarCorreoPersonal($usuario)
     $plantillaPersonal = Plantilla::where('tipo_plantilla', 'personal')->where('predeterminada', true)->first();
 
 
-
     if (isset($plantillaPersonal)) {
         Mail::send('emails.template',
             ['usuario' => $usuario, 'plantilla' => $plantillaPersonal],
             function ($message) use ($usuario) {
-            $message->to($usuario->email)
+                $message->to($usuario->email)
                     ->subject('Happy Birthday!' . $usuario->getNombreCompleto());//Hasta aqui 
             });
 
@@ -127,27 +126,19 @@ function enviarCorreoDiario($usuarios, $dia)
     $plantillaPersonal = Plantilla::where('tipo_plantilla', 'diario')->where('predeterminada', true)->first();
 
     if (isset($plantillaPersonal)) {
-        /* $mensaje = "<ul class='fa fa-ul'>";
-
-         foreach ($usuarios as $usuario) {
-             $mensaje .= "<li>" . $usuario->getNombreCompleto() . "</li>";
-         }
-         $mensaje .= "</ul>";*/
 
         $mensaje = "";
-       
+
         foreach ($usuarios as $usuario) {
-            $mensaje .=  $usuario->getNombreCompleto() . "<br/>";
+            $mensaje .= $usuario->getNombreCompleto() . "<br/>";
         }
-       
+
 
         Mail::send('emails.template',
             ['mensaje' => $mensaje, 'plantilla' => $plantillaPersonal],
             function ($message) use ($dia, $plantillaPersonal) {
-               $message->to('cojowa.group@cojowa.edu.co')
-                    ->subject($plantillaPersonal->nombre . ' '. $dia);
-                   /* $message->to('anthony.jimenez@cojowa.edu.co')
-                    ->subject($plantillaPersonal->nombre . ' '. $dia);*/
+                $message->to('cojowa.group@cojowa.edu.co')
+                    ->subject($plantillaPersonal->nombre . ' ' . $dia);
             });
         return true;
     }
@@ -165,23 +156,63 @@ function enviarCorreoMensual($tempUsuarios, $mes)
     $plantillaMensual = Plantilla::where('tipo_plantilla', 'mensual')->where('predeterminada', true)->first();
 
     if (isset($plantillaMensual)) {
-        $mensaje = "<center><table id='mensual' border='0' style='border-collapse:unset;width:60%'>";
-        $mensaje .= "<tr>";
-        $mensaje .= "<th>Nombre</th><th>Dia</th>";
-        $mensaje .= "</tr>";
-        foreach ($usuarios->sortBy('fecha_nacimiento.day')->values()->all() as $usuario) {
-            $mensaje .= "<tr><td align='center'>" . $usuario->getNombreCompleto() . "</td><td align='center'>" . $usuario->fecha_nacimiento->day . "</td></tr>";
-        }
-        $mensaje .= "</table></center>";
 
+        $columns = "";
+
+        foreach ($usuarios->sortBy('fecha_nacimiento.day')->values()->all() as $usuario) {
+
+            $avatar = $usuario->getUrlAvatar();
+            $name = $usuario->getNombreCompleto();
+            $day = $usuario->fecha_nacimiento->day;
+
+            $columns .= <<<HTML
+                <div class="column">
+                    <p>
+                      <img src="$avatar" alt="$avatar">
+                    </p>
+                    <p>$name</p>
+                    <p>$day</p>
+                  </div>
+HTML;
+        }
+
+        $mensaje = <<<HTML
+            <style>
+                * {
+                  box-sizing: border-box;
+                }
+               
+                /* Create three equal columns that floats next to each other */
+                .column {
+                  float: left;
+                  width: 33.33%;
+                  padding: 10px;
+                  height: 300px; /* Should be removed. Only for demonstration */
+                }
+                
+                /* Clear floats after the columns */
+                .row:after {
+                  content: "";
+                  display: table;
+                  clear: both;
+                }
+                </style>
+
+                <div class="row">
+                   $columns
+                </div>
+
+HTML;
         Mail::send('emails.template',
             ['mensaje' => $mensaje, 'plantilla' => $plantillaMensual],
-            function ($message) use ($mes, $plantillaMensual) {
+            static function ($message) use ($mes, $plantillaMensual) {
                 $message->to('cojowa.group@cojowa.edu.co')
-                    ->subject($plantillaMensual->nombre . ' '. $mes);
+                    ->subject($plantillaMensual->nombre . ' ' . $mes);
             });
         return true;
-    } else {
-        return false;
     }
+
+    return false;
+
+
 }

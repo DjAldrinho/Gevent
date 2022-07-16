@@ -52,6 +52,15 @@ class Usuario extends Model implements AuthenticatableContract,
         return $this->nombres . ' ' . $this->apellidos;
     }
 
+    public function getUrlAvatar()
+    {
+        if ($this->avatar) {
+            return asset('/fotos') . '/' . $this->avatar;
+        }
+
+        return '';
+    }
+
     public function getFechaNacimientoAttribute($fechaNacimiento)
     {
         return new Date($fechaNacimiento);

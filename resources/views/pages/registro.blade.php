@@ -22,7 +22,7 @@
                     <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
                     <div class="col-sm-9 @if($errors->has('email')) has-error @endif">
                         <input type="email" class="form-control" id="inputEmail3" placeholder="Email" required
-                               name="email"/>
+                               name="email" value="{{old('email')}}"/>
                         <span class="help-block text-info">{{$errors->first('email')}}</span>
                     </div>
 
@@ -31,7 +31,7 @@
                     <label for="txtNombres" class="col-sm-3 control-label">Nombres</label>
                     <div class="col-sm-9 @if($errors->has('nombres')) has-error @endif">
                         <input type="text" class="form-control" id="txtNombres" placeholder="Nombres" required
-                               name="nombres"/>
+                               name="nombres" value="{{old('nombres')}}"/>
                     </div>
                     <span class="help-block text-info">{{$errors->first('nombres')}}</span>
                 </div>
@@ -39,7 +39,7 @@
                     <label for="txtApellidos" class="col-sm-3 control-label">Apellidos</label>
                     <div class="col-sm-9 @if($errors->has('apellidos')) has-error @endif">
                         <input type="text" class="form-control" id="txtApellidos" placeholder="Apellidos" required
-                               name="apellidos"/>
+                               name="apellidos" value="{{old('apellidos')}}"/>
                     </div>
                     <span class="help-block text-info">{{$errors->first('apellidos')}}</span>
                 </div>
@@ -47,7 +47,7 @@
                     <label for="txtCargo" class="col-sm-3 control-label">Cargo</label>
                     <div class="col-sm-9 @if($errors->has('cargo')) has-error @endif">
                         <input type="text" class="form-control" id="txtCargo" placeholder="Cargo"
-                               name="cargo"/>
+                               name="cargo" value="{{old('cargo')}}"/>
                     </div>
                     <span class="help-block text-info">{{$errors->first('cargo')}}</span>
                 </div>
@@ -55,16 +55,17 @@
                     <label for="fileAvatar" class="col-sm-3 control-label">Foto</label>
                     <div class="col-sm-9 @if($errors->has('avatar')) has-error @endif">
                         <input type="file" class="form-control" id="fileAvatar" placeholder="Cargo"
-                               name="avatar"/>
+                               name="avatar" value="{{old('avatar')}}"/>
+                        <span class="help-block text-info">{{$errors->first('avatar')}}</span>
                     </div>
-                    <span class="help-block text-info">{{$errors->first('avatar')}}</span>
+
                 </div>
                 <div class="form-group">
                     <label for="dateFechaNacimiento" class="col-sm-3 control-label">Cumpleaños</label>
                     <div class="col-sm-9 @if($errors->has('fecha_nacimiento')) has-error @endif">
                         <input type="date" class="form-control" id="dateFechaNacimiento"
                                placeholder="Fecha de Nacimiento (Ejemplo: 24/12/1995)"
-                               required
+                               required value="{{old('fecha_nacimiento')}}"
                                name="fecha_nacimiento"/>
                         <span class="help-block text-info">{{$errors->first('fecha_nacimiento')}}</span>
                     </div>
@@ -95,6 +96,26 @@
                         </div>
                     @endif
                 @endif
+                <div class="form-group">
+                    <label for="txtPassword" class="col-sm-3 control-label">Password</label>
+                    <div class="col-sm-9 @if($errors->has('password')) has-error @endif">
+                        <input type="password" class="form-control" id="txtPassword"
+                               placeholder="Password"
+                               required
+                               name="password"/>
+                        <span class="help-block text-info">{{$errors->first('password')}}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="txtPassword" class="col-sm-3 control-label">Confirm Password</label>
+                    <div class="col-sm-9 @if($errors->has('password_confirmation')) has-error @endif">
+                        <input type="password" class="form-control" id="txtPassword"
+                               placeholder="Confirm Password"
+                               required
+                               name="password_confirmation"/>
+                        <span class="help-block text-info">{{$errors->first('password_confirmation')}}</span>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button type="submit" class="btn btn-success pull-right">Registrarse</button>
