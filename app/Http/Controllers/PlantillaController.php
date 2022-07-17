@@ -39,9 +39,22 @@ class PlantillaController extends Controller
 
         $plantillaPredeterminada = Plantilla::where('tipo_plantilla', $id)->where('predeterminada', true)->first();
 
-        $testUsers = $this->getTestUsers(6);
+        $testUsers = null;
 
-        $actualMonth = $this->getActualMonth($plantillaPredeterminada);
+
+        $actualMonth = '';
+
+        if (isset($plantillaPredeterminada)) {
+
+            if ($plantillaPredeterminada->tipo_plantilla !== 'personal') {
+                $count = 6;
+            } else {
+                $count = 1;
+            }
+
+            $testUsers = $this->getTestUsers($count);
+            $actualMonth = $this->getActualMonth($plantillaPredeterminada);
+        }
 
         return view('pages/plantillas/personalizar_plantillas', compact('plantillas', 'plantillaPredeterminada', 'id', 'testUsers', 'actualMonth'));
     }
@@ -216,7 +229,13 @@ class PlantillaController extends Controller
 
         $actualMonth = $this->getActualMonth($template);
 
-        $users = $this->getTestUsers(10);
+        if ($template->tipo_plantilla === 'personal') {
+            $count = 1;
+        } else {
+            $count = 6;
+        }
+
+        $users = $this->getTestUsers($count);
 
 
         Mail::send('emails.new_template',
@@ -249,7 +268,14 @@ class PlantillaController extends Controller
 
     protected function getTestUsers($count)
     {
-        return factory(Usuario::class, $count)->make();
+
+        $users = factory(Usuario::class, $count)->make();
+
+        if (is_array($users)) {
+            return $users->sortBy('nombres')->values()->all();
+        }
+
+        return $users;
     }
 
 }

@@ -11,13 +11,14 @@
             box-sizing: border-box;
         }
 
-
         body {
+            display: flex;
+            justify-content: center;
             -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
             -webkit-font-smoothing: antialiased;
             width: 100%;
-            background: url({{(isset($template->imagen_uno))?asset('/plantillas/'.$template->tipo_plantilla.'/fondos/'.$template->imagen_uno):''}}) left top repeat;
+            background: url({{ isset($template->imagen_uno) && !empty($template->imagen_uno)?$message->embed(public_path().'/plantillas/'.$template->tipo_plantilla.'/fondos/'.$template->imagen_uno):''}}) left top repeat;
         }
 
         h2 {
@@ -32,7 +33,7 @@
         }
 
         .header {
-            background: url("{{asset('plantillas/'.$template->tipo_plantilla.'/cabeceras/'.$template->imagen_dos)}}") 50% 50% / cover;
+            background: url("{{$message->embed(public_path().'/plantillas/'.$template->tipo_plantilla.'/cabeceras/'.$template->imagen_dos)}}") 50% 50% / cover;
             height: 300px;
             width: 600px;
         }
@@ -42,13 +43,13 @@
         }
 
         .footer {
-            background: url("{{asset('plantillas/'.$template->tipo_plantilla.'/cuerpos/'.$template->imagen_tres)}}") 50% 50% / cover;
+            background: url("{{$message->embed(public_path().'/plantillas/'.$template->tipo_plantilla.'/cuerpos/'.$template->imagen_tres)}}") 50% 50% / cover;
             height: 150px;
             width: 600px;
         }
 
         .ribbon {
-            background: url("{{asset('img/cinta.png')}}") 50% 50% / cover;
+            background: url("{{$message->embed(public_path().'/img/cinta.png')}}") 50% 50% / cover;
             width: 600px;
             height: 200px;
         }
@@ -73,7 +74,7 @@
             display: flex;
             justify-content: center;
             margin-bottom: 3rem;
-            max-height: 240px;
+            height: 250px;
         }
 
         .column-list {
@@ -86,8 +87,8 @@
         }
 
         .column .item img {
-            width: 120px;
-            height: 140px;
+            width: 65px;
+            height: 80px;
         }
 
 
@@ -98,8 +99,8 @@
         }
 
         .column-list .item img {
-            width: 60px;
-            height: 65px;
+            width: 40px;
+            height: 50px;
         }
 
         .column-list .item p {
@@ -129,21 +130,36 @@
         @if(isset($template->mensaje))
             {!! $template->mensaje !!}
         @endif
-        <div class="row">
-            @foreach($users as $user)
-                <div class="{{$template->tipo_plantilla === 'diario'?'column': 'column-list'}}">
+        <div class="row" style="{{$template->tipo_plantilla === 'personal'?'display:flex': ''}}">
+            @if($template->tipo_plantilla !== 'personal')
+                @foreach($users as $user)
+                    <div class="{{$template->tipo_plantilla === 'mensual'?'column': 'column-list'}}">
+                        <div class="item">
+                            @if(isset($user->avatar))
+                                <img src="{{$message->embed($isTest ? public_path().'/img/'.$user->avatar:public_path().'/fotos/'.$user->avatar)}}"
+                                     alt=""/>
+                            @endif
+                            <p>
+                                <span class="name">{{$user->getNombreCompleto()}}</span> <br>
+                                <span class="job"> {{$user->cargo}}</span> <br>
+                            </p>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="column">
                     <div class="item">
-                        @if(isset($user->avatar))
-                            <img src="{{asset($isTest? 'img/'.$user->avatar: $user->getUrlAvatar())}}" alt=""/>
+                        @if(isset($users->avatar))
+                            <img src="{{$message->embed($isTest ? public_path().'/img/'.$users->avatar:public_path().'/fotos/'.$users->avatar)}}"
+                                 alt=""/>
                         @endif
                         <p>
-                            <span class="name">{{$user->getNombreCompleto()}}</span> <br>
-                            <span class="job"> {{$user->cargo}}</span> <br>
-                            {{--<span class="day"> {{$user->fecha_nacimiento->day}}</span>--}}
+                            <span class="name">{{$users->getNombreCompleto()}}</span> <br>
+                            <span class="job"> {{$users->cargo}}</span> <br>
                         </p>
                     </div>
                 </div>
-            @endforeach
+            @endif
         </div>
     </div>
     <div class="footer"></div>

@@ -23,3 +23,6 @@ Homestead.json
 .phpunit.result.cache
 /.idea/
 /public/fotos/
+/public/plantillas/personal/
+/public/plantillas/mensual/
+/public/plantillas/diario/

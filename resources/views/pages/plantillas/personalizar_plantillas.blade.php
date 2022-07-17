@@ -100,39 +100,55 @@
                                 <p>{!! $plantillaPredeterminada->mensaje !!}</p>
                             </div>
                             <div class="col-md-12">
-                                <div class="row" style="padding-top: 1rem">
-                                    @foreach($testUsers as $user)
-                                        @if($plantillaPredeterminada->tipo_plantilla === 'mensual')
-                                            <div class="col-md-6 text-center">
-                                                <div class="media">
-                                                    <div class="media-left">
-                                                        <img src="{{asset('img/'.$user->avatar)}}"
-                                                             width="4" height="50" alt="" class="media-object"/>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <h4 class="media-heading"
-                                                            style="color: rgb(0 74 173);font-weight: bold">{{$user->getNombreCompleto()}}</h4>
-                                                        <p style="font-family: 'Comic Sans MS', serif;font-weight: bold;">
-                                                            <span style="color: rgb(131 161 187)"> {{$user->cargo}}</span>
-                                                        </p>
+                                <div class="row"
+                                     style="padding-top: 1rem;{{$plantillaPredeterminada->tipo_plantilla === 'personal'?'display:flex;justify-content:center':''}}">
+                                    @if(count($testUsers) > 1)
+                                        @foreach($testUsers as $user)
+                                            @if($plantillaPredeterminada->tipo_plantilla === 'mensual')
+                                                <div class="col-md-6 text-center" style="margin-bottom: 1rem">
+                                                    <div class="media">
+                                                        <div class="media-left">
+                                                            <img src="{{asset('img/'.$user->avatar)}}"
+                                                                 width="40" height="50" alt="" class="media-object"/>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <h4 class="media-heading"
+                                                                style="color: rgb(0 74 173);font-weight: bold">{{$user->getNombreCompleto()}}</h4>
+                                                            <p style="font-family: 'Comic Sans MS', serif;font-weight: bold;">
+                                                                <span style="color: rgb(131 161 187)"> {{$user->cargo}}</span>
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @else
-                                            <div class="col-md-4 text-center"
-                                                 style="margin-bottom: 2rem;max-height: 240px;">
-                                                @if(isset($user->avatar))
-                                                    <img src="{{asset('img/'.$user->avatar)}}" alt="" width="80"
-                                                         height="100"/>
-                                                @endif
-                                                <p style="font-family: 'Comic Sans MS', serif;font-weight: bold;">
-                                                    <span style="color: rgb(0 74 173);">{{$user->getNombreCompleto()}}</span>
-                                                    <br>
-                                                    <span style="color: rgb(131 161 187)"> {{$user->cargo}}</span>
-                                                </p>
-                                            </div>
-                                        @endif
-                                    @endforeach
+                                            @else
+                                                <div class="col-md-4 text-center"
+                                                     style="margin-bottom: 2rem;max-height: 240px;">
+                                                    @if(isset($user->avatar))
+                                                        <img src="{{asset('img/'.$user->avatar)}}" alt="" width="80"
+                                                             height="100"/>
+                                                    @endif
+                                                    <p style="font-family: 'Comic Sans MS', serif;font-weight: bold;">
+                                                        <span style="color: rgb(0 74 173);">{{$user->getNombreCompleto()}}</span>
+                                                        <br>
+                                                        <span style="color: rgb(131 161 187)"> {{$user->cargo}}</span>
+                                                    </p>
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <div class="col-md-4 text-center"
+                                             style="margin-bottom: 2rem;max-height: 240px;">
+                                            @if(isset($testUsers->avatar))
+                                                <img src="{{asset('img/'.$testUsers->avatar)}}" alt="" width="80"
+                                                     height="100"/>
+                                            @endif
+                                            <p style="font-family: 'Comic Sans MS', serif;font-weight: bold;">
+                                                <span style="color: rgb(0 74 173);">{{$testUsers->getNombreCompleto()}}</span>
+                                                <br>
+                                                <span style="color: rgb(131 161 187)"> {{$testUsers->cargo}}</span>
+                                            </p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="col-md-12">

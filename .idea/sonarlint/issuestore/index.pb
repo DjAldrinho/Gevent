@@ -43,3 +43,19 @@ X
 :
 
 Dockerfile,6\6\6651ddff6eb82c840ced7c1dddee15c6e1913dd4
+Z
+*app/Http/Controllers/UsuarioController.php,1\0\10af116ed2da56e4e4efedfe595e0e4dd798b9a1
+N
+app/Traits/DatesTranslator.php,2\7\27579dc5b6b9bd21e3ca669062c08ee341bf95ea
+>
+config/app.php,7\3\734f7be25e8008acc7129e73cd116d5de913e6fd
+B
+config/session.php,e\1\e1025c27321c40291fc56c4990ab2088a43c3269
+?
+config/view.php,e\6\e6430547e4595725fda00ce199f6a9e013a954a3
+=
+composer.json,3\9\3957b91a0d8450cea0115cfd5af69eac90d75897
+D
+config/constants.php,8\e\8ef8c8dfe606b6730487242cb8bd89655ec77623
+C
+config/services.php,6\7\67cde7ebf0c82e44eedc43a9b83d4fa13c684078

@@ -40,7 +40,7 @@ class BirthdayCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -61,25 +61,26 @@ class BirthdayCommand extends Command
 
 
         foreach ($usuarios as $usuario) {
-            if (($usuario->fecha_nacimiento->day == $fechaActual->day) && ($usuario->fecha_nacimiento->month == $fechaActual->month)) {
-
-                if (enviarCorreoPersonal($usuario)) {
-                    $this->info('Correos Personales enviados!');
-                } else {
-                    $this->info('Correos Personales no enviados!');
+            if (!$usuario->is_superadministrador) {
+                if (($usuario->fecha_nacimiento->day == $fechaActual->day) && ($usuario->fecha_nacimiento->month == $fechaActual->month)) {
+                    if (enviarCorreoPersonal($usuario)) {
+                        $this->info('Correos Personales enviados!');
+                    } else {
+                        $this->info('Correos Personales no enviados!');
+                    }
+                    $usuariosDia[] = $usuario;
                 }
-                array_push($usuariosDia, $usuario);
-            }
 
-            if (true) {
-                if ($usuario->fecha_nacimiento->month == $fechaActual->month) {
-                    array_push($usuariosMensual, $usuario);
+                if ($primerDia) {
+                    if ($usuario->fecha_nacimiento->month == $fechaActual->month) {
+                        $usuariosMensual[] = $usuario;
+                    }
                 }
             }
         }
 
 
-        if (count($usuariosMensual) > 0) {
+        if ($primerDia && !empty($usuariosMensual)) {
             $mes = new Date($fechaActual);
             if (enviarCorreoMensual($usuariosMensual, $mes->format("F"))) {
                 $this->info('Correos Mensuales enviados!');
@@ -88,7 +89,7 @@ class BirthdayCommand extends Command
             }
         }
 
-        if (count($usuariosDia) > 0) {
+        if (!empty($usuariosDia)) {
             $dia = new Date($fechaActual);
             if (enviarCorreoDiario($usuariosDia, $dia->format('l j \\d\\e F \\d\\e\\l Y'))) {
                 $this->info('Correos Diarios enviados!');
@@ -97,7 +98,6 @@ class BirthdayCommand extends Command
             }
         }
     }
-
 }
 
 function enviarCorreoPersonal($usuario)
@@ -106,11 +106,12 @@ function enviarCorreoPersonal($usuario)
 
 
     if (isset($plantillaPersonal)) {
-        Mail::send('emails.template',
-            ['usuario' => $usuario, 'plantilla' => $plantillaPersonal],
-            function ($message) use ($usuario) {
+        $actualMonth = getActualMonth($plantillaPersonal);
+        Mail::send('emails.new_template',
+            ['users' => $usuario, 'template' => $plantillaPersonal, 'actualMonth' => $actualMonth, 'isTest' => false],
+            static function ($message) use ($usuario) {
                 $message->to($usuario->email)
-                    ->subject('Happy Birthday!' . $usuario->getNombreCompleto());//Hasta aqui 
+                    ->subject('Happy Birthday!' . $usuario->getNombreCompleto());
             });
 
         return true;
@@ -127,16 +128,11 @@ function enviarCorreoDiario($usuarios, $dia)
 
     if (isset($plantillaPersonal)) {
 
-        $mensaje = "";
+        $actualMonth = getActualMonth($plantillaPersonal);
 
-        foreach ($usuarios as $usuario) {
-            $mensaje .= $usuario->getNombreCompleto() . "<br/>";
-        }
-
-
-        Mail::send('emails.template',
-            ['mensaje' => $mensaje, 'plantilla' => $plantillaPersonal],
-            function ($message) use ($dia, $plantillaPersonal) {
+        Mail::send('emails.new_template',
+            ['users' => $usuarios, 'template' => $plantillaPersonal, 'actualMonth' => $actualMonth, 'isTest' => false],
+            static function ($message) use ($dia, $plantillaPersonal) {
                 $message->to('cojowa.group@cojowa.edu.co')
                     ->subject($plantillaPersonal->nombre . ' ' . $dia);
             });
@@ -151,68 +147,41 @@ function enviarCorreoDiario($usuarios, $dia)
 function enviarCorreoMensual($tempUsuarios, $mes)
 {
 
-    $usuarios = Collection::make($tempUsuarios);
+    $users = Collection::make($tempUsuarios);
 
-    $plantillaMensual = Plantilla::where('tipo_plantilla', 'mensual')->where('predeterminada', true)->first();
+    $template = Plantilla::where('tipo_plantilla', 'mensual')->where('predeterminada', true)->first();
 
-    if (isset($plantillaMensual)) {
+    if (isset($template)) {
 
-        $columns = "";
+        $actualMonth = getActualMonth($template);
 
-        foreach ($usuarios->sortBy('fecha_nacimiento.day')->values()->all() as $usuario) {
-
-            $avatar = $usuario->getUrlAvatar();
-            $name = $usuario->getNombreCompleto();
-            $day = $usuario->fecha_nacimiento->day;
-
-            $columns .= <<<HTML
-                <div class="column">
-                    <p>
-                      <img src="$avatar" alt="$avatar">
-                    </p>
-                    <p>$name</p>
-                    <p>$day</p>
-                  </div>
-HTML;
-        }
-
-        $mensaje = <<<HTML
-            <style>
-                * {
-                  box-sizing: border-box;
-                }
-               
-                /* Create three equal columns that floats next to each other */
-                .column {
-                  float: left;
-                  width: 33.33%;
-                  padding: 10px;
-                  height: 300px; /* Should be removed. Only for demonstration */
-                }
-                
-                /* Clear floats after the columns */
-                .row:after {
-                  content: "";
-                  display: table;
-                  clear: both;
-                }
-                </style>
-
-                <div class="row">
-                   $columns
-                </div>
-
-HTML;
-        Mail::send('emails.template',
-            ['mensaje' => $mensaje, 'plantilla' => $plantillaMensual],
-            static function ($message) use ($mes, $plantillaMensual) {
+        Mail::send('emails.new_template',
+            ['users' => $users, 'template' => $template, 'actualMonth' => $actualMonth, 'isTest' => false],
+            static function ($message) use ($mes, $template) {
                 $message->to('cojowa.group@cojowa.edu.co')
-                    ->subject($plantillaMensual->nombre . ' ' . $mes);
+                    ->subject($template->nombre . ' ' . $mes);
             });
         return true;
     }
 
     return false;
+}
 
+function getActualMonth(Plantilla $template)
+{
+    $now = Carbon::now();
 
+    $months = config('constants.months');
+
+    $localeMonth = $now->localeMonth;
+    $esMonth = $months[$localeMonth];
+    $month = $localeMonth . ' / ' . $esMonth;
+
+    if ($template->tipo_plantilla === 'mensual') {
+        $actualMonth = $month;
+    } else {
+        $actualMonth = $month . ', ' . $now->day;
+    }
+
+    return $actualMonth;
 }
