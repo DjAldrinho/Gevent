@@ -34,3 +34,12 @@ w
 Gdatabase/migrations/2022_07_10_004105_add_columns_in_usuarios_table.php,f\4\f4c12197cb1bfd37f18f34aa66712b80f83f07ea
 =
 composer.lock,c\3\c3262e2a0879195bd6a727e90f768bc85ad79ffd
+d
+4resources/views/pages/plantillas/plantilla.blade.php,a\1\a10e106910ae6f993e6e9358494e564150d18c91
+T
+$resources/views/pages/edit.blade.php,f\6\f6e7627d2ec7a99682c2f9c9a0cf6bb072c70ffc
+X
+(resources/views/pages/registro.blade.php,3\8\38564507f9a3367817d61e4e602698f9db9e58c1
+:
+
+Dockerfile,6\6\6651ddff6eb82c840ced7c1dddee15c6e1913dd4

@@ -14,15 +14,14 @@ $factory->define(App\Usuario::class, function (Faker\Generator $faker) {
     static $password;
 
     return [
-        'nombres' => $faker->name,
+        'nombres' => $faker->firstName,
         'apellidos' => $faker->lastName,
-        'rol' => $faker->randomElement($array = ['administrador', 'empleado']),
-        'identificacion' => $faker->randomNumber($nbDigits = NULL),
-        'genero' => $faker->boolean($chanceOfGettingTrue = 50),
-        'area' => $faker->numerify('Area ##'),
-        'fecha_nacimiento' => $faker->date($format = 'Y-m-d', $max = 'now'),
+        'fecha_nacimiento' => $faker->date(),
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
+        'is_administrador' => false,
+        'is_superadministrador' => false,
+        'cargo' => $faker->jobTitle,
+        'avatar' => 'usuario.png'
     ];
 });

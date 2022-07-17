@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Plantilla;
+use App\Usuario;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +12,6 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class PlantillaController extends Controller
 {
-
 
     /**
      * PlantillaController constructor.
@@ -38,7 +39,11 @@ class PlantillaController extends Controller
 
         $plantillaPredeterminada = Plantilla::where('tipo_plantilla', $id)->where('predeterminada', true)->first();
 
-        return view('pages/plantillas/personalizar_plantillas', compact('plantillas', 'plantillaPredeterminada', 'id'));
+        $testUsers = $this->getTestUsers(6);
+
+        $actualMonth = $this->getActualMonth($plantillaPredeterminada);
+
+        return view('pages/plantillas/personalizar_plantillas', compact('plantillas', 'plantillaPredeterminada', 'id', 'testUsers', 'actualMonth'));
     }
 
     public function update(Request $request, $id)
@@ -205,15 +210,46 @@ class PlantillaController extends Controller
 
     public function testEmail(Request $request)
     {
-        $plantilla = Plantilla::find($request->plantilla);
 
-        Mail::send('emails.template',
-            ['prueba' => true, 'plantilla' => $plantilla],
-            static function ($message) use ($request, $plantilla) {
+
+        $template = Plantilla::find($request->plantilla);
+
+        $actualMonth = $this->getActualMonth($template);
+
+        $users = $this->getTestUsers(10);
+
+
+        Mail::send('emails.new_template',
+            ['isTest' => true, 'template' => $template, 'users' => $users, 'actualMonth' => $actualMonth],
+            static function ($message) use ($request, $template) {
                 $message->to($request->user()->email)
-                    ->subject('Prueba de plantilla ' . $plantilla->tipo_plantilla);
+                    ->subject('Prueba de plantilla ' . $template->tipo_plantilla);
             });
         return back()->with('mensaje', 'Mensaje Enviado Correctamente');
+    }
+
+    protected function getActualMonth(Plantilla $template)
+    {
+        $now = Carbon::now();
+
+        $months = config('constants.months');
+
+        $localeMonth = $now->localeMonth;
+        $esMonth = $months[$localeMonth];
+        $month = $localeMonth . ' / ' . $esMonth;
+
+        if ($template->tipo_plantilla === 'mensual') {
+            $actualMonth = $month;
+        } else {
+            $actualMonth = $month . ', ' . $now->day;
+        }
+
+        return $actualMonth;
+    }
+
+    protected function getTestUsers($count)
+    {
+        return factory(Usuario::class, $count)->make();
     }
 
 }

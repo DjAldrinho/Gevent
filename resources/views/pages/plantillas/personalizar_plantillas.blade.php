@@ -1,6 +1,8 @@
 @extends('layout.template')
 
-@section('title') Personalizar Plantillas @endsection
+@section('title')
+    Personalizar Plantillas
+@endsection
 
 @section('jumbotron')
     <h1>Personalizar Plantillas!</h1>
@@ -55,61 +57,96 @@
             </div>
         </div>
         <div class="col-sm-6 col-md-8">
-                @if(count($plantillas) > 0)
-                    <button class="btn btn-lg btn-block btn-primary" data-toggle="modal"
-                            data-target="#modal-seleccionar-{{$id}}">Seleccionar plantilla
-                    </button>
-                 @endif
-                @if(isset($plantillaPredeterminada))
-
-
-                    <a class="btn btn-lg btn-block btn-info" href="{{route('test-email', $plantillaPredeterminada)}}">
-                        Test Email!
-                    </a>
-
-
-                    <button class="btn btn-lg btn-block btn-warning" data-toggle="modal"
-                            data-target="#modal-modificar-{{$id}}">Modificar plantilla
-                    </button>
-                @endif
-                <button class="btn btn-lg btn-block btn-success" data-toggle="modal" data-target="#modal-nuevo-{{$id}}">
-                    Crear Nueva
+            @if(count($plantillas) > 0)
+                <button class="btn btn-lg btn-block btn-primary" data-toggle="modal"
+                        data-target="#modal-seleccionar-{{$id}}">Seleccionar plantilla
                 </button>
-            </div>
+            @endif
+            @if(isset($plantillaPredeterminada))
+
+                <a class="btn btn-lg btn-block btn-info" href="{{route('test-email', $plantillaPredeterminada)}}">
+                    Test Email!
+                </a>
+
+
+                <button class="btn btn-lg btn-block btn-warning" data-toggle="modal"
+                        data-target="#modal-modificar-{{$id}}">Modificar plantilla
+                </button>
+            @endif
+            <button class="btn btn-lg btn-block btn-success" data-toggle="modal" data-target="#modal-nuevo-{{$id}}">
+                Crear Nueva
+            </button>
+        </div>
     </div>
 
     <!-- Modal -->
     @if(isset($plantillaPredeterminada))
-    <div class="modal fade" id="modal-{{$id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">{{$plantillaPredeterminada->nombre}}</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <img src="{{asset('plantillas/'.$plantillaPredeterminada->tipo_plantilla.'/cabeceras/'.$plantillaPredeterminada->imagen_dos)}}"
-                                 class="img-responsive" width="600" height="300"/>
-                        </div>
-                        <div class="col-md-12">
-                            <h3>{{\Carbon\Carbon::now()->toFormattedDateString()}}</h3>
-                            <p>{!! $plantillaPredeterminada->mensaje !!}</p>
-                        </div>
-                        <div class="col-md-12">
-                            <img src="{{asset('plantillas/'.$plantillaPredeterminada->tipo_plantilla.'/cuerpos/'.$plantillaPredeterminada->imagen_tres)}}"
-                                 width="600" height="150" class="img-responsive">
-                        </div>
-                        <div class="col-md-12">
-                            <img src="{{asset('img/cinta.png')}}" class="img-responsive">
+        <div class="modal fade" id="modal-{{$id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{{$plantillaPredeterminada->nombre}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <img src="{{asset('plantillas/'.$plantillaPredeterminada->tipo_plantilla.'/cabeceras/'.$plantillaPredeterminada->imagen_dos)}}"
+                                     alt="" class="img-responsive" width="600" height="300"/>
+                            </div>
+                            <div class="col-md-12">
+                                <h2 style="color: #d32426;font-family: 'Comic Sans MS', serif; text-align: center;">{{$actualMonth}}</h2>
+                                <p>{!! $plantillaPredeterminada->mensaje !!}</p>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="row" style="padding-top: 1rem">
+                                    @foreach($testUsers as $user)
+                                        @if($plantillaPredeterminada->tipo_plantilla === 'mensual')
+                                            <div class="col-md-6 text-center">
+                                                <div class="media">
+                                                    <div class="media-left">
+                                                        <img src="{{asset('img/'.$user->avatar)}}"
+                                                             width="4" height="50" alt="" class="media-object"/>
+                                                    </div>
+                                                    <div class="media-body">
+                                                        <h4 class="media-heading"
+                                                            style="color: rgb(0 74 173);font-weight: bold">{{$user->getNombreCompleto()}}</h4>
+                                                        <p style="font-family: 'Comic Sans MS', serif;font-weight: bold;">
+                                                            <span style="color: rgb(131 161 187)"> {{$user->cargo}}</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <div class="col-md-4 text-center"
+                                                 style="margin-bottom: 2rem;max-height: 240px;">
+                                                @if(isset($user->avatar))
+                                                    <img src="{{asset('img/'.$user->avatar)}}" alt="" width="80"
+                                                         height="100"/>
+                                                @endif
+                                                <p style="font-family: 'Comic Sans MS', serif;font-weight: bold;">
+                                                    <span style="color: rgb(0 74 173);">{{$user->getNombreCompleto()}}</span>
+                                                    <br>
+                                                    <span style="color: rgb(131 161 187)"> {{$user->cargo}}</span>
+                                                </p>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <img src="{{asset('plantillas/'.$plantillaPredeterminada->tipo_plantilla.'/cuerpos/'.$plantillaPredeterminada->imagen_tres)}}"
+                                     width="600" height="150" class="img-responsive" alt="">
+                            </div>
+                            <div class="col-md-12">
+                                <img src="{{asset('img/cinta.png')}}" class="img-responsive" alt="">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     @endif
 
     <div class="modal fade" id="modal-nuevo-{{$id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -136,7 +173,6 @@
                         <div class="form-group">
                             <label for="txtMensaje">Mensaje</label>
                             <textarea class="editor" id="txtMensaje" name="mensaje"></textarea>
-                            <p class="help-block">Ingrese #### para remplazar por el nombre</p>
                         </div>
                         <div class="form-group">
                             <label for="fileImagenUno">Imagen de Fondo</label>

@@ -38,6 +38,5 @@ Route::group(['prefix' => 'plantilla'], static function () {
     Route::post('personalizar', 'PlantillaController@personalizar');
 });
 
-
 Route::get('logout', ['as' => 'logout', 'uses' => 'UsuarioController@logout']);
 Route::post('login', ['as' => 'login', 'uses' => 'UsuarioController@postLogin']);
