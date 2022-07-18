@@ -135,10 +135,8 @@
                 @foreach($users as $user)
                     <div class="{{$template->tipo_plantilla === 'mensual'?'column': 'column-list'}}">
                         <div class="item">
-                            @if(isset($user->avatar))
-                                <img src="{{$message->embed($isTest ? public_path().'/img/'.$user->avatar:public_path().'/fotos/'.$user->avatar)}}"
-                                     alt=""/>
-                            @endif
+                            <img src="{{$message->embed(($isTest || !isset($user->avatar)) ? public_path().'/img/'.$user->avatar:public_path().'/fotos/'.$user->avatar)}}"
+                                 alt=""/>
                             <p>
                                 <span class="name">{{$user->getNombreCompleto()}}</span> <br>
                                 <span class="job"> {{$user->cargo}}</span> <br>

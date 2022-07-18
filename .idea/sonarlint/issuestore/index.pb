@@ -75,3 +75,13 @@ Y
 )public/plantillas/diario/cuerpos/.gitkeep,2\d\2df0a2a0e43b24d516c820a59561c1b23f6d7ce2
 [
 +public/plantillas/diario/cabeceras/.gitkeep,b\f\bf1c6d37deb281a4106ce73be604ac5c5229db46
+Y
+)public/plantillas/mensual/fondos/.gitkeep,d\f\dfc6f69f5fe8b7161c2e4d9c52a477ed6c978ab6
+Z
+*public/plantillas/mensual/cuerpos/.gitkeep,0\7\071d9352801e84fec7f6d4df7078c3c7d0339d9b
+\
+,public/plantillas/mensual/cabeceras/.gitkeep,2\1\2199bd82bce9c65fb6d0779904f3b97f77966262
+Q
+!public/plantillas/diario/.gitkeep,3\5\353132c300106d43539722fdfa1deb8bf4bb5ab8
+R
+"public/plantillas/mensual/.gitkeep,9\3\9329b564863dfe3aae0bb4f4a1e98882ac070446
