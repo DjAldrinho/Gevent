@@ -61,8 +61,6 @@ C
 config/services.php,6\7\67cde7ebf0c82e44eedc43a9b83d4fa13c684078
 C
 app/Http/routes.php,c\5\c5b960169390ae788b3f1e237af2d727a86837e6
-Y
-)resources/views/emails/template.blade.php,9\c\9cd538d3b9d123ae6352a2acbd71ec305ac8dc0a
 Z
 *public/plantillas/personal/fondos/.gitkeep,3\f\3f547313584a5b6435f69be43a98c3e6a4a05484
 [

@@ -105,13 +105,13 @@
                                     @if(count($testUsers) > 1)
                                         @foreach($testUsers as $user)
                                             @if($plantillaPredeterminada->tipo_plantilla === 'mensual')
-                                                <div class="col-md-6 text-center" style="margin-bottom: 1rem">
+                                                <div class="col-md-6 text-center" style="margin-bottom:0.5rem">
                                                     <div class="media">
                                                         <div class="media-left">
                                                             <img src="{{asset('img/'.$user->avatar)}}"
                                                                  width="40" height="50" alt="" class="media-object"/>
                                                         </div>
-                                                        <div class="media-body">
+                                                        <div class="media-body text-left">
                                                             <h4 class="media-heading"
                                                                 style="color: rgb(0 74 173);font-weight: bold">{{$user->getNombreCompleto()}}</h4>
                                                             <p style="font-family: 'Comic Sans MS', serif;font-weight: bold;">
