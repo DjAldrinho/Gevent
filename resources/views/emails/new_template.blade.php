@@ -20,7 +20,7 @@
                  width="600" height="300" alt=""/>
         </center>
         <div>
-            <center>
+            <center style="max-width: 600px">
                 <h2 style="color: #d32426;font-family: 'Comic Sans MS', serif;text-align: center;">{{$actualMonth}}</h2>
                 @if(isset($template->mensaje))
                     {!! $template->mensaje !!}
@@ -61,15 +61,17 @@
                 @else
                     <center style="width: 100%">
                         <div style="display: flex;justify-content: center;height: 250px;align-items: center;margin-top: 1rem;">
-                            <div style="display: table-row;align-items: center;align-content: center;text-align: center">
-                                <img src="{{$message->embed(($isTest || !isset($users->avatar)) ? public_path().'/img/'.$users->avatar:public_path().'/fotos/'.$users->avatar)}}"
-                                     alt="" style="width: 65px;height: 80px;"/>
-                                <p style="text-align: center;font-weight: bold;font-family: 'Comic Sans MS', serif;">
-                                    <span style="color: #004bad">{{$users->getNombreCompleto()}}</span>
-                                    <br>
-                                    <span style="color: #83a1bb;"> {{$users->cargo}}</span>
-                                </p>
-                            </div>
+                            <center style="width: 100%">
+                                <div style="display: table-row;align-items: center;align-content: center;text-align: center">
+                                    <img src="{{$message->embed(($isTest || !isset($users->avatar)) ? public_path().'/img/'.$users->avatar:public_path().'/fotos/'.$users->avatar)}}"
+                                         alt="" style="width: 65px;height: 80px;"/>
+                                    <p style="text-align: center;font-weight: bold;font-family: 'Comic Sans MS', serif;">
+                                        <span style="color: #004bad">{{$users->getNombreCompleto()}}</span>
+                                        <br>
+                                        <span style="color: #83a1bb;"> {{$users->cargo}}</span>
+                                    </p>
+                                </div>
+                            </center>
                         </div>
                     </center>
                 @endif
