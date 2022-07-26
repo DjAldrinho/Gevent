@@ -53,6 +53,8 @@
                                         <span style="color: #004bad">{{$user->getNombreCompleto()}}</span>
                                         <br>
                                         <span style="color: #83a1bb;"> {{$user->cargo}}</span>
+                                        <br>
+                                        <span style="color: #83a1bb;"> <b>Day: </b> {{$user->fecha_nacimiento->day}}</span>
                                     </p>
                                 </div>
                             </div>
@@ -80,11 +82,7 @@
         <center>
             <img src="{{$message->embed(public_path() . '/plantillas/'.$template->tipo_plantilla.'/cuerpos/'.$template->imagen_tres)}}"
                  alt=""
-                 style="width: 600px;height: 150px"/>
-        </center>
-        <center>
-            <img src="{{$message->embed(public_path(). '/img/cinta.png')}}"
-                 alt="" title=""/>
+                 style="width: 600px;height: 100%"/>
         </center>
     </div>
 </center>

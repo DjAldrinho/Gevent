@@ -153,10 +153,7 @@
                             </div>
                             <div class="col-md-12">
                                 <img src="{{asset('plantillas/'.$plantillaPredeterminada->tipo_plantilla.'/cuerpos/'.$plantillaPredeterminada->imagen_tres)}}"
-                                     width="600" height="150" class="img-responsive" alt="">
-                            </div>
-                            <div class="col-md-12">
-                                <img src="{{asset('img/cinta.png')}}" class="img-responsive" alt="">
+                                     width="600" class="img-responsive" alt="">
                             </div>
                         </div>
                     </div>
@@ -244,7 +241,6 @@
                                 <textarea class="editor" id="txtMensaje" name="mensaje" required>
                                     {{$plantillaPredeterminada->mensaje}}
                                 </textarea>
-                                <p class="help-block">Ingrese #### para remplazar por el nombre</p>
                             </div>
                             <div class="form-group">
                                 <label for="fileImagenUno">Imagen de Fondo</label>
